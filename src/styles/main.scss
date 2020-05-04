@@ -1,9 +1,11 @@
 $box-size: 100px;
 $days: "mon", "tue", "wed", "thu", "fri", "sat", "sun";
 
-@for $i from 28 through 31 {
-  .calendar-#{$i} > :nth-child(-n + #{$i}) {
-    display: block;
+@for $i from 1 through 31 {
+  .calendar div:nth-child(#{$i}) {
+    &::after {
+      content: "#{$i}";
+    }
   }
 }
 
@@ -12,7 +14,7 @@ $days: "mon", "tue", "wed", "thu", "fri", "sat", "sun";
   $i: index($days, $day);
 
   .calendar-#{$day} > div:first-child {
-    margin-left: ($i - 1) * 101px;
+    margin-left: ($i - 1) * ($box-size + 1px);
   }
 }
 
@@ -26,14 +28,12 @@ body {
 }
 
 .calendar {
-  width: 710px;
+  max-width: $box-size * 7 + 8;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  counter-reset: day-count;
 
   > div {
-    display: none;
     position: relative;
     height: $box-size;
     width: $box-size;
@@ -49,13 +49,17 @@ body {
     }
 
     &::after {
-      content: counter(day-count);
-      counter-increment: day-count;
       position: absolute;
       width: 100%;
       font-size: 30px;
       line-height: 100px;
       text-align: center;
     }
+  }
+
+  &-30 div:nth-child(n+31),
+  &-29 div:nth-child(n+30),
+  &-28 div:nth-child(n+29) {
+    display: none;
   }
 }
